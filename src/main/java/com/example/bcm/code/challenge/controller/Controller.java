@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
  * Rest Controller exposing API's for getting 
  * Player details and Game Stats.
  */
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/players")
 public class Controller {
@@ -142,8 +144,11 @@ public class Controller {
 			@RequestParam(defaultValue = "", required = false) String name,
 			@RequestParam(defaultValue = "", required = false) String age, 
 			@RequestParam(defaultValue = "name,asc", required = false) String[] sort,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "15") int size) {
-		
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "15") int size) {
+	
+		if(page < 0 || size <0) {
+		      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	  try {
         List<Order> orders = new ArrayList<Order>();
 		
@@ -160,7 +165,7 @@ public class Controller {
         }
 
         List<Player> players = new ArrayList<Player>();
-        Pageable pagingSort = PageRequest.of(page-1, size, Sort.by(orders));
+        Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
         
         Page<Player> pagePlayers;
 		
@@ -186,7 +191,7 @@ public class Controller {
 
 	    Map<String, Object> response = new HashMap<>();
 	    response.put("players", players);
-	    response.put("currentPage", pagePlayers.getNumber()+1);
+	    response.put("currentPage", pagePlayers.getNumber());
 	    response.put("totalItems", pagePlayers.getTotalElements());
 	    response.put("totalPages", pagePlayers.getTotalPages());
 
