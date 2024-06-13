@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
  * Player details and Game Stats.
  */
 @RestController
+@RequestMapping("/players")
 public class Controller {
 
 	private static final Logger log = LoggerFactory.getLogger(Controller.class);
@@ -61,7 +63,7 @@ public class Controller {
 	 * haven't lost a match
 	 * @return - Players List
 	 */	
-	@GetMapping("/getUnbeaten") 
+	@GetMapping("/unbeaten") 
 	List<Player> getUnbeaten() { 
 		return matchRepo.unbeatenPlayers(); 
 	}
@@ -74,7 +76,7 @@ public class Controller {
 	 * @return - Players List with count 
 	 * of winning games
 	 */	
-	@GetMapping("/getWinCnt") 
+	@GetMapping("/wincnt") 
 	List<Result> getWinCnt() { 
 		return matchRepo.findWinCount(); 
 	}
@@ -89,7 +91,7 @@ public class Controller {
 	 * 
 	 * @return - ArrayList of Players Ids
 	 */	
-	@GetMapping("/getResults") 
+	@GetMapping("/results") 
 	ArrayList<ArrayList<Long>> getResults() {
 		
 		List<Player> unbeatenList = matchRepo.unbeatenPlayers();
@@ -135,7 +137,7 @@ public class Controller {
 	 * @return - ArrayList of Players
 	 * 
 	 */	
-	@GetMapping("/players")
+	@GetMapping("/list")
 	public ResponseEntity<Map<String, Object>> getAll(
 			@RequestParam(defaultValue = "", required = false) String name,
 			@RequestParam(defaultValue = "", required = false) String age, 
@@ -193,5 +195,5 @@ public class Controller {
 		  e.printStackTrace();
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
-	}	
+	}
 }
