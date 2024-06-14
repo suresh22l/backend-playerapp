@@ -1,7 +1,7 @@
 # Player App
 
 Player App is a backend service that serves the player information and the game statistics.
-PlayerApp uses H2 inmemory for data store and has confgiuration for MySQL too.
+PlayerApp uses H2 in-memory for data store and has configuration to use MySQL too.
 
 ## Build & Deploy locally
 
